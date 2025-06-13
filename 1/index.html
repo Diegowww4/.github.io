@@ -273,6 +273,7 @@
             const idcard = document.getElementById('idcard').value;
 
             fetch('https://script.google.com/macros/s/AKfycbziT1d0tz9Tt40iwZCFomqJFBdIJmpJEbfJnVsLifLKoOqzB2rKPw61Fwj39xne-lAPDw/exec', {
+
                 method: 'POST',
                 body: JSON.stringify({ name, phone, email, idcard }),
                 headers: { 'Content-Type': 'application/json' }
