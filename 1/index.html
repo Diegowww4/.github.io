@@ -346,26 +346,60 @@
             // 記錄參與者（本地儲存）
             participants.push({name, phone, email, idcard});
             
+            // 顯示提交中的訊息
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '資料提交中...';
+            submitBtn.disabled = true;
+            
             // 儲存到 Google 試算表
             try {
+                // 使用 FormData 方式發送
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('phone', phone);
+                formData.append('email', email);
+                formData.append('idcard', idcard);
+                
                 const response = await fetch('https://script.google.com/macros/s/AKfycbyzQvZYUjfXpIOunFdlR4YZoo5eMWG0iV7mZKb00Eg_OxqTGeTdIssJpHx-GuKxcEE0vw/exec', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
+                    body: formData
+                });
+                
+                const result = await response.text();
+                console.log('Google Apps Script 回應:', result);
+                
+                // 檢查是否成功
+                if (response.ok) {
+                    console.log('資料已成功儲存到試算表');
+                } else {
+                    console.error('儲存失敗，狀態碼:', response.status);
+                }
+                
+            } catch (error) {
+                console.error('連線錯誤:', error);
+                
+                // 備用方案：使用 GET 方式傳送參數
+                try {
+                    const params = new URLSearchParams({
                         name: name,
                         phone: phone,
                         email: email,
                         idcard: idcard
-                    })
-                });
-                
-                const result = await response.json();
-                console.log('資料已儲存到試算表:', result);
-            } catch (error) {
-                console.error('儲存失敗:', error);
+                    });
+                    
+                    const getUrl = `https://script.google.com/macros/s/AKfycbyzQvZYUjfXpIOunFdlR4YZoo5eMWG0iV7mZKb00Eg_OxqTGeTdIssJpHx-GuKxcEE0vw/exec?${params}`;
+                    
+                    await fetch(getUrl, { method: 'GET', mode: 'no-cors' });
+                    console.log('使用備用方案發送資料');
+                } catch (backupError) {
+                    console.error('備用方案也失敗:', backupError);
+                }
             }
+            
+            // 恢復按鈕狀態
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
             
             // 更新跑馬燈
             updateMarquee();
