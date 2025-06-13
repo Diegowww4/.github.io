@@ -160,5 +160,63 @@
       <button class="back-button" onclick="goHome()">返回首頁</button>
     </div>
   </div>
+
+  <script>
+    let clickCount = 0;
+    let participants = [];
+
+    function clickLucky() {
+      clickCount++;
+      document.getElementById('clickCount').textContent = clickCount;
+      document.getElementById('homepage').style.display = 'none';
+      document.getElementById('formPage').style.display = 'block';
+    }
+
+    function goHome() {
+      document.getElementById('warningPage').style.display = 'none';
+      document.getElementById('homepage').style.display = 'block';
+      document.getElementById('name').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('idcard').value = '';
+    }
+
+    function startTimer() {
+      let timeLeft = 300;
+      const timer = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (--timeLeft < 0) clearInterval(timer);
+      }, 1000);
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const idcard = document.getElementById('idcard').value;
+
+      participants.push({ name, phone, email, idcard });
+      updateMarquee();
+
+      alert("⚠️ 提醒您：這是一個釣魚詐騙模擬網站，請勿輸入真實資料！");
+      document.getElementById('formPage').style.display = 'none';
+      document.getElementById('warningPage').style.display = 'block';
+    }
+
+    function updateMarquee() {
+      const marquee = document.getElementById('marqueeText');
+      if (participants.length > 0) {
+        const names = participants.map(p => p.name).join('、');
+        marquee.textContent = `🎉 ${names} 等 ${participants.length} 位朋友參與了演練！提醒：真正的抽獎不會索取個人敏感資料！`;
+      }
+    }
+
+    window.onload = function () {
+      startTimer();
+    }
+  </script>
 </body>
 </html>
